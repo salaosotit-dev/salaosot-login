@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#047C3E">
+<title>เข้าสู่ระบบ · เบิกของสำนักงานกลาง ศาลาโอสถ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500&display=swap">
+<style>
+  :root{--brand:#00A651;--brand-deep:#047C3E;--ink:#12211A;--muted:#5C6D64;--line:#DFE8E2;--bg:#F4F8F5;--card:#FFFFFF;--tint:#E8F6EE;
+        --no:#A82A2A;--no-bg:#FBEAEA;--ok:#0A6B3A}
+  @media (prefers-color-scheme:dark){:root{--brand:#2DC272;--brand-deep:#2DC272;--ink:#E9F1EB;--muted:#9CACA3;--line:#2E4036;--bg:#070B09;--card:#16211B;--tint:#15291E;--no:#F48A8A;--no-bg:#2C1717;--ok:#3DBE79}}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:var(--bg);color:var(--ink);
+       font-family:'Noto Sans Thai',system-ui,sans-serif;
+       background-image:radial-gradient(60% 50% at 0% 100%,color-mix(in srgb,var(--brand) 14%,transparent),transparent),radial-gradient(50% 40% at 100% 0%,color-mix(in srgb,var(--brand) 10%,transparent),transparent)}
+  .card{width:min(420px,100%);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:34px 28px 26px;text-align:center;box-shadow:0 20px 50px -30px rgba(0,0,0,.35)}
+  .mark{width:76px;height:76px;margin:0 auto 18px;border-radius:18px;background:var(--tint);display:grid;place-items:center}
+  .org{margin:0;color:var(--brand-deep);font:600 14px 'IBM Plex Sans Thai',sans-serif}
+  h1{margin:6px 0 6px;font:700 26px/1.25 'IBM Plex Sans Thai',sans-serif}
+  .sub{margin:0 0 24px;color:var(--muted);font-size:14px}
+  #gbtn{display:flex;justify-content:center;min-height:44px}
+  .msg{margin:16px 0 0;padding:10px 12px;border-radius:10px;font-size:14px;line-height:1.5;text-align:left}
+  .msg.bad{background:var(--no-bg);color:var(--no)}
+  .msg.ok{background:var(--tint);color:var(--ok)}
+  .msg[hidden]{display:none}
+  .note{margin:18px 0 0;color:var(--muted);font-size:12.5px;line-height:1.6}
+  .alt{display:inline-block;margin-top:14px;color:var(--brand-deep);font-size:13px}
+  .alt[hidden]{display:none}
+  @media (max-width:400px){h1{font-size:22px}.card{padding:28px 20px 22px}}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:s .7s linear infinite;vertical-align:-2px;margin-right:6px}
+  @keyframes s{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="mark" aria-hidden="true">
+      <svg width="46" height="46" viewBox="0 0 64 64"><path fill="var(--brand)" d="M32 4 3 25.5v11.2L32 15.2l29 21.5V25.5L32 4Z"/><path fill="var(--brand)" d="M32 21 10 37.4V60h44V37.4L32 21Zm6.6 13.4v6.1h6.1v7.2h-6.1v6.1h-7.2v-6.1h-6.1v-7.2h6.1v-6.1h7.2Z"/></svg>
+    </div>
+    <p class="org">บริษัท ศาลาโอสถรีเทล จำกัด</p>
+    <h1>ระบบเบิกของสำนักงานกลาง</h1>
+    <p class="sub">เบิกของ · อนุมัติ · คลังสินค้า ของทุกสาขา</p>
+    <div id="gbtn" aria-live="polite"></div>
+    <p class="msg" id="msg" role="status" hidden></p>
+    <p class="note">ใช้บัญชี Google (@gmail.com) ที่ผู้ดูแลลงทะเบียนไว้ให้<br>ถ้าเข้าไม่ได้ ติดต่อผู้ดูแลระบบเพื่อเพิ่มชื่อ</p>
+    <a class="alt" id="altLink" href="#" hidden>เข้าด้วยรหัสทางอีเมลแทน</a>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+  (function () {
+    var C = window.LOGIN_CONFIG || {};
+    var msg = document.getElementById('msg'), box = document.getElementById('gbtn'), alt = document.getElementById('altLink');
+    function say(text, kind, busy) {
+      msg.hidden = !text; msg.className = 'msg ' + (kind || '');
+      msg.textContent = '';
+      if (busy) { var s = document.createElement('span'); s.className = 'spin'; msg.appendChild(s); }
+      msg.appendChild(document.createTextNode(text || ''));
+    }
+    var okCfg = /^[0-9]+-[a-z0-9]+\.apps\.googleusercontent\.com$/.test(C.clientId || '') &&
+                /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(C.appUrl || '');
+    if (!okCfg) { say('ยังไม่ได้ตั้งค่า config.js (clientId / appUrl) — ดู README', 'bad'); return; }
+    alt.href = C.appUrl; alt.hidden = false; alt.target = '_top';
+
+    window.onGoogleCredential = function (resp) {
+      say('กำลังตรวจสอบบัญชี…', 'ok', true);
+      box.style.pointerEvents = 'none'; box.style.opacity = '.5';
+      fetch(C.appUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // text/plain = ไม่มี CORS preflight
+        body: JSON.stringify({ action: 'google', credential: resp.credential })
+      }).then(function (r) { return r.json(); }).then(function (j) {
+        if (!j.ok) { say(j.msg || 'เข้าสู่ระบบไม่สำเร็จ', 'bad'); box.style.pointerEvents = ''; box.style.opacity = ''; return; }
+        say('สวัสดีคุณ ' + (j.name || '') + ' — กำลังเข้าสู่ระบบ…', 'ok', true);
+        location.replace(C.appUrl + '?t=' + encodeURIComponent(j.ticket));   // replace = ไม่ค้างในปุ่มย้อนกลับ
+      }).catch(function () {
+        say('ติดต่อระบบไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่', 'bad'); box.style.pointerEvents = ''; box.style.opacity = '';
+      });
+    };
+
+    function start() {
+      if (!window.google || !google.accounts || !google.accounts.id) { setTimeout(start, 100); return; }
+      google.accounts.id.initialize({ client_id: C.clientId, callback: window.onGoogleCredential, auto_select: false, ux_mode: 'popup' });
+      google.accounts.id.renderButton(box, { type: 'standard', theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill', locale: 'th', width: 300 });
+    }
+    var s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
+    s.onload = start;
+    s.onerror = function () { say('โหลดปุ่ม Google ไม่ได้ — ลองรีเฟรช หรือใช้ "เข้าด้วยรหัสทางอีเมลแทน"', 'bad'); };
+    document.head.appendChild(s);
+  })();
+  </script>
+</body>
+</html>
