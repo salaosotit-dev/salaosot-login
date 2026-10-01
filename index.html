@@ -66,6 +66,8 @@
                 /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(C.appUrl || '');
     if (!okCfg) { say('ยังไม่ได้ตั้งค่า config.js (clientId / appUrl) — ดู README', 'bad'); return; }
     alt.href = C.appUrl; alt.hidden = false; alt.target = '_top';
+    // ปลุกสคริปต์ไว้ก่อนระหว่างที่ผู้ใช้เลือกบัญชี Google (ครั้งแรกของวัน Apps Script เริ่มช้า) — ไม่ส่งข้อมูลใด ๆ
+    try { fetch(C.appUrl + '?page=ping', { mode: 'no-cors', cache: 'no-store', credentials: 'omit' }).catch(function () {}); } catch (e) {}
 
     window.onGoogleCredential = function (resp) {
       say('กำลังตรวจสอบบัญชี…', 'ok', true);
