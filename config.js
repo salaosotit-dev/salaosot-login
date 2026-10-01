@@ -6,5 +6,5 @@ window.LOGIN_CONFIG = {
   // OAuth Client ID จาก Google Cloud Console (ลงท้ายด้วย .apps.googleusercontent.com)
   clientId: '393507899543-ff6jagcavcq8sf9uqvjp5geic7ikvha3.apps.googleusercontent.com',
   // ลิงก์เว็บแอป Apps Script (Deploy → Manage deployments → Web app URL ที่ลงท้าย /exec)
-  appUrl: 'https://script.google.com/macros/s/AKfycbw6UcCcp6icb7EJnEsPR8J23Qsa5pl3YFIJIhxi1VD8jOy6T1uq5GfaQxcklkV6MYiO/exec'
+  appUrl: 'https://script.google.com/macros/s/AKfycbwiUf-kX1sDAtH2fFbxt7lVjRu76L25K43MiAKuykDdtwnb0o62n_oa3VHww1T-xojJ/exec'
 };
